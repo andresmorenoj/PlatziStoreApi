@@ -7,6 +7,8 @@ import {
   Param,
   Query,
   Body,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 
 @Controller('products')
@@ -30,6 +32,7 @@ export class ProductsController {
   }
 
   @Get(':productId')
+  @HttpCode(HttpStatus.ACCEPTED)
   findOne(@Param('productId') productId: string) {
     return {
       message: `Product id: ${productId}`,
