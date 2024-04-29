@@ -10,7 +10,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 
-import { ProductsService } from '../service/products.service';
+import { ProductsService } from '../services/products.service';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
