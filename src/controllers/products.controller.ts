@@ -5,7 +5,6 @@ import {
   Put,
   Delete,
   Param,
-  Query,
   Body,
   HttpStatus,
   HttpCode,
@@ -20,15 +19,9 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
-  getAll(
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 0,
-    @Query('brand') brand: string = '',
-  ) {
+  getAll() {
+    // @Query('brand') brand: string = '', // @Query('offset') offset = 0, // @Query('limit') limit = 100,
     return this.productsService.findAll();
-    // return {
-    //   message: `Products id: ${limit} - offset: ${offset} - brand: ${brand}`,
-    // };
   }
 
   @Get('filter')
@@ -42,9 +35,6 @@ export class ProductsController {
   @HttpCode(HttpStatus.ACCEPTED)
   findOne(@Param('productId', ParseIntPipe) productId: number) {
     return this.productsService.findOne(productId);
-    // return {
-    //   message: `Product id: ${productId}`,
-    // };
   }
 
   @Post()
@@ -53,10 +43,6 @@ export class ProductsController {
       message: 'Create action',
       payload: this.productsService.create(payload),
     };
-    // return {
-    //   message: 'create action',
-    //   payload,
-    // };
   }
 
   @Put(':id')
@@ -68,18 +54,10 @@ export class ProductsController {
       message: 'Product modified',
       payload: this.productsService.update(id, payload),
     };
-    // return {
-    //   message: 'Product modified',
-    //   id,
-    //   payload,
-    // };
   }
 
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.delete(id);
-    // return {
-    //   message: `Product with id "${id}" has been deleted successfully`,
-    // };
   }
 }
