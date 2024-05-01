@@ -24,6 +24,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('tasks')
+  tasks() {
+    return this.usersService.getTasks();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get one user by user ID' })
   get(@Param('id', ParseIntPipe) id: number) {
