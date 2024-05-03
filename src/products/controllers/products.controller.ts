@@ -1,11 +1,11 @@
 import {
   Controller,
   Get,
-  Post,
-  Put,
-  Delete,
+  // Post,
+  // Put,
+  // Delete,
   Param,
-  Body,
+  // Body,
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ProductsService } from '../services/products.service';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
+// import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -22,7 +22,6 @@ export class ProductsController {
 
   @Get()
   getAll() {
-    // @Query('brand') brand: string = '', // @Query('offset') offset = 0, // @Query('limit') limit = 100,
     return this.productsService.findAll();
   }
 
@@ -39,27 +38,27 @@ export class ProductsController {
     return this.productsService.findOne(productId);
   }
 
-  @Post()
-  create(@Body() payload: CreateProductDto) {
-    return {
-      message: 'Create action',
-      payload: this.productsService.create(payload),
-    };
-  }
+  // @Post()
+  // create(@Body() payload: CreateProductDto) {
+  //   return {
+  //     message: 'Create action',
+  //     payload: this.productsService.create(payload),
+  //   };
+  // }
 
-  @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateProductDto,
-  ) {
-    return {
-      message: 'Product modified',
-      payload: this.productsService.update(id, payload),
-    };
-  }
+  // @Put(':id')
+  // update(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body() payload: UpdateProductDto,
+  // ) {
+  //   return {
+  //     message: 'Product modified',
+  //     payload: this.productsService.update(id, payload),
+  //   };
+  // }
 
-  @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.productsService.delete(id);
-  }
+  // @Delete(':id')
+  // delete(@Param('id', ParseIntPipe) id: number) {
+  //   return this.productsService.delete(id);
+  // }
 }
