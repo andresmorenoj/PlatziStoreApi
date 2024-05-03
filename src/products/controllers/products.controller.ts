@@ -1,11 +1,11 @@
 import {
   Controller,
   Get,
-  // Post,
-  // Put,
-  // Delete,
+  Post,
+  Put,
+  Delete,
   Param,
-  // Body,
+  Body,
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ProductsService } from '../services/products.service';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
-// import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
+import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -38,27 +38,27 @@ export class ProductsController {
     return this.productsService.findOne(productId);
   }
 
-  // @Post()
-  // create(@Body() payload: CreateProductDto) {
-  //   return {
-  //     message: 'Create action',
-  //     payload: this.productsService.create(payload),
-  //   };
-  // }
+  @Post()
+  create(@Body() data: CreateProductDto) {
+    return {
+      message: 'Create action',
+      payload: this.productsService.create(data),
+    };
+  }
 
-  // @Put(':id')
-  // update(
-  //   @Param('id', ParseIntPipe) id: number,
-  //   @Body() payload: UpdateProductDto,
-  // ) {
-  //   return {
-  //     message: 'Product modified',
-  //     payload: this.productsService.update(id, payload),
-  //   };
-  // }
+  @Put(':productId')
+  update(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Body() productChanges: UpdateProductDto,
+  ) {
+    return {
+      message: 'Product modified',
+      payload: this.productsService.update(productId, productChanges),
+    };
+  }
 
-  // @Delete(':id')
-  // delete(@Param('id', ParseIntPipe) id: number) {
-  //   return this.productsService.delete(id);
-  // }
+  @Delete(':productId')
+  delete(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productsService.delete(productId);
+  }
 }
