@@ -1,18 +1,26 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Product } from '../entities/product.entity';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
+import { BrandsService } from './brands.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productsRepo: Repository<Product>,
+    private bransService: BrandsService,
   ) {}
 
   findAll() {
-    return this.productsRepo.find();
+    return this.productsRepo.find({
+      relations: ['brand'],
+    });
   }
 
   async findOne(id: number) {
@@ -23,7 +31,7 @@ export class ProductsService {
     return product;
   }
 
-  create(data: CreateProductDto) {
+  async create(productData: CreateProductDto) {
     // const newProduct = new Product();
 
     // newProduct.name = data.name;
@@ -32,13 +40,33 @@ export class ProductsService {
     // newProduct.stock = data.stock;
     // newProduct.image = data.image;
 
-    const newProduct = this.productsRepo.create(data);
+    const newProduct = this.productsRepo.create(productData);
 
-    return this.productsRepo.save(newProduct);
+    if (productData.brandId) {
+      const brand = await this.bransService.findOne(productData.brandId);
+      newProduct.brand = brand;
+    } else {
+      throw new BadRequestException(
+        'Cannot create product because brand is not not present',
+      );
+    }
+
+    this.productsRepo.save(newProduct);
+    return newProduct;
   }
 
   async update(id: number, productChanges: UpdateProductDto) {
     const product = await this.productsRepo.findOne({ where: { id } });
+
+    if (productChanges.brandId) {
+      const brand = await this.bransService.findOne(productChanges.brandId);
+      product.brand = brand;
+    } else {
+      throw new BadRequestException(
+        'Cannot update product because brand is not not present',
+      );
+    }
+
     this.productsRepo.merge(product, productChanges);
 
     return this.productsRepo.save(product);
