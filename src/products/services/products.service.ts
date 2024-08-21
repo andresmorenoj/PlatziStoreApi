@@ -78,13 +78,51 @@ export class ProductsService {
         where: { id: productChanges.brandId },
       });
       product.brand = brand;
-    } else {
-      throw new BadRequestException(
-        'Cannot update product because brand is not not present',
-      );
+    }
+
+    if (productChanges.categoriesIds) {
+      const categories = await this.categoriesRepo.findBy({
+        id: In(productChanges.categoriesIds),
+      });
+
+      product.categories = categories;
     }
 
     this.productsRepo.merge(product, productChanges);
+
+    return this.productsRepo.save(product);
+  }
+
+  async removeCategoryByProduct(productId: number, categoryId: number) {
+    console.log('entra service');
+
+    const product = await this.productsRepo.findOne({
+      where: { id: productId },
+      relations: ['categories'],
+    });
+
+    const filteredCategories = product.categories.filter((item) => {
+      return item.id !== categoryId;
+    });
+
+    product.categories = filteredCategories;
+
+    return this.productsRepo.save(product);
+  }
+
+  async addCategoryByProduct(productId: number, categoryId: number) {
+    const product = await this.productsRepo.findOne({
+      where: { id: productId },
+      relations: ['categories'],
+    });
+
+    const category = await this.categoriesRepo.findOne({
+      where: { id: categoryId },
+    });
+
+    if (category) {
+      product.categories.push(category);
+    }
 
     return this.productsRepo.save(product);
   }
