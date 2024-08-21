@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: ['src/**/*.entity.ts'],
-  migrations: ['src/database/migrations/*.ts'],
+  entities: ['../**/*.entity.ts'],
+  migrations: ['../src/database/migrations/*.ts'],
   migrationsTableName: 'migrations',
 });
